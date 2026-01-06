@@ -48,21 +48,40 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void deleteTask(int index) {
+    toDoList.removeAt(index);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.amber[100],
       appBar: AppBar(title: Text("To Do App"), backgroundColor: Colors.amber),
-      body: ListView.builder(
-        itemCount: toDoList.length,
-        itemBuilder: (context, index) {
-          return TodoTile(
-            taskName: "${index + 1}. ${toDoList[index][0]}",
-            isCompleted: toDoList[index][1],
-            onChanged: (value) => changeCheck(value, index),
-          );
-        },
-      ),
+      body: toDoList.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "The list is empty.",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text("Try add a new task in button below"),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: toDoList.length,
+              itemBuilder: (context, index) {
+                return TodoTile(
+                  taskName: "${index + 1}. ${toDoList[index][0]}",
+                  isCompleted: toDoList[index][1],
+                  onChanged: (value) => changeCheck(value, index),
+                  deleteFunction: (context) => deleteTask(index),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => addNewTask(),
         child: Icon(Icons.add),
