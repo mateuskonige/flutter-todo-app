@@ -16,33 +16,19 @@ class DialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      title: const Text('New Task'),
       backgroundColor: Colors.amber[200],
-      content: Container(
-        height: 200,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            //get user input
-            TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "New Task",
-              ),
-            ),
-
-            //actions (cancel, save)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FormButton(text: "Cancel", onPressed: () => onCancel()),
-                SizedBox(width: 8),
-                FormButton(text: "Save", onPressed: () => onSave()),
-              ],
-            ),
-          ],
+      content: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: "Title",
         ),
       ),
+      actions: [
+        FormButton(text: "Cancel", onPressed: () => onCancel()),
+        FormButton(text: "Save", onPressed: () => onSave()),
+      ],
     );
   }
 }
