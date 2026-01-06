@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/utils/dialog_box.dart';
 import 'package:todo_app/utils/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,6 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _controller = TextEditingController();
+
   List toDoList = [
     ["Make work", false],
     ["Make exercise", true],
@@ -18,6 +21,15 @@ class _HomePageState extends State<HomePage> {
   void changeCheck(bool? value, int index) {
     toDoList[index][1] = !toDoList[index][1];
     setState(() {});
+  }
+
+  void addNewTask() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogBox(controller: _controller);
+      },
+    );
   }
 
   @override
@@ -34,6 +46,10 @@ class _HomePageState extends State<HomePage> {
             onChanged: (value) => changeCheck(value, index),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => addNewTask(),
+        child: Icon(Icons.add),
       ),
     );
   }
