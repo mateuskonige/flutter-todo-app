@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_app/pages/home_page.dart';
 
 void main() {
@@ -12,7 +13,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: HomePage(),
-      theme: ThemeData(primarySwatch: Colors.amber),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.amber,
+          brightness: Brightness.light,
+        ),
+        textTheme: GoogleFonts.ubuntuTextTheme(),
+      ),
     );
   }
 }
