@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app/pages/home_page.dart';
 
-void main() {
+void main() async {
+  //init hive in flutter
+  await Hive.initFlutter();
+
+  //and create (open) a new instance of database (box 😂) with whatever name
+  await Hive.openBox("myBox");
+
   runApp(const MyApp());
 }
 

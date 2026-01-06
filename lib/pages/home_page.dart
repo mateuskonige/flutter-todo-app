@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todo_app/data/db.dart';
 import 'package:todo_app/utils/dialog_box.dart';
 import 'package:todo_app/utils/todo_tile.dart';
 
@@ -10,28 +12,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //call the box
+  final _myBox = Hive.box("myBox");
+  //and instanciate the database class
+  ToDoDataBase db = ToDoDataBase();
+
+  @override
+  void initState() {
+    // if its the 1st time ever opening the app, then create default data
+    if (_myBox.get("TODOLIST") == null) {
+      db.createInitialData();
+    } else {
+      // theres already exists some data
+      db.loadData();
+    }
+
+    super.initState();
+  }
+
   final _controller = TextEditingController();
 
-  List toDoList = [
-    ["Make work", false],
-    ["Make exercise", true],
-    ["Make food", false],
-  ];
-
   void changeCheck(bool? value, int index) {
-    toDoList[index][1] = !toDoList[index][1];
-    //can call to set state after change some values
+    db.toDoList[index][1] = !db.toDoList[index][1];
+    //can call to setState after change some values
     setState(() {});
+    db.updateData();
   }
 
   void saveTask() {
-    //or can call set state and add the value inside of it
+    //or can call setState and add the value inside of it
     setState(() {
-      toDoList.add([_controller.text, false]);
+      db.toDoList.add([_controller.text, false]);
       _controller.clear();
     });
+    db.updateData();
 
-    //this damn guy close the dialog
+    //this guy close the dialog box
     Navigator.of(context).pop();
   }
 
@@ -49,8 +65,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void deleteTask(int index) {
-    toDoList.removeAt(index);
+    db.toDoList.removeAt(index);
     setState(() {});
+    db.updateData();
   }
 
   @override
@@ -58,7 +75,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.amber[100],
       appBar: AppBar(title: Text("To Do App"), backgroundColor: Colors.amber),
-      body: toDoList.isEmpty
+      body: db.toDoList.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -72,11 +89,11 @@ class _HomePageState extends State<HomePage> {
               ),
             )
           : ListView.builder(
-              itemCount: toDoList.length,
+              itemCount: db.toDoList.length,
               itemBuilder: (context, index) {
                 return TodoTile(
-                  taskName: "${index + 1}. ${toDoList[index][0]}",
-                  isCompleted: toDoList[index][1],
+                  taskName: "${index + 1}. ${db.toDoList[index][0]}",
+                  isCompleted: db.toDoList[index][1],
                   onChanged: (value) => changeCheck(value, index),
                   deleteFunction: (context) => deleteTask(index),
                 );
