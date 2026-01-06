@@ -20,14 +20,30 @@ class _HomePageState extends State<HomePage> {
 
   void changeCheck(bool? value, int index) {
     toDoList[index][1] = !toDoList[index][1];
+    //can call to set state after change some values
     setState(() {});
+  }
+
+  void saveTask() {
+    //or can call set state and add the value inside of it
+    setState(() {
+      toDoList.add([_controller.text, false]);
+      _controller.clear();
+    });
+
+    //this damn guy close the dialog
+    Navigator.of(context).pop();
   }
 
   void addNewTask() {
     showDialog(
       context: context,
       builder: (context) {
-        return DialogBox(controller: _controller);
+        return DialogBox(
+          controller: _controller,
+          onSave: saveTask,
+          onCancel: () => Navigator.of(context).pop(),
+        );
       },
     );
   }
