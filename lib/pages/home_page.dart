@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.amber[100],
-      appBar: AppBar(title: Text("To Do App")),
+      appBar: AppBar(title: Text("To Do App"), backgroundColor: Colors.amber),
       body: ListView.builder(
         itemCount: toDoList.length,
         itemBuilder: (context, index) {
